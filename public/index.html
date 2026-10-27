@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<title>ImmoNova</title>
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body>
+		<main class="container">
+			<h1>ImmoNova</h1>
+			<p>Posez une question sur les premières étapes de votre projet immobilier.</p>
+
+			<form id="chat-form">
+				<label for="prompt">Votre question</label>
+				<textarea id="prompt" rows="5" required></textarea>
+				<button type="submit">Interroger l'assistant</button>
+			</form>
+
+			<section aria-live="polite">
+				<h2>Réponse</h2>
+				<p id="status"></p>
+				<div id="answer"></div>
+			</section>
+		</main>
+
+		<script src="script.js"></script>
+	</body>
+</html>
