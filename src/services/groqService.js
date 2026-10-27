@@ -70,6 +70,11 @@ export class GroqService {
       throw err;
     }
     this.history.push({ role: "assistant", content: answer });
+
+    if (this.history.length > 10) {
+      this.history = this.history.slice(-10);
+    }
+
     return answer;
   }
 

@@ -1,3 +1,5 @@
+let currentSessionId = null;
+
 const form = document.querySelector("#chat-form");
 const promptInput = document.querySelector("#prompt");
 const statusElement = document.querySelector("#status");
@@ -18,7 +20,8 @@ form.addEventListener("submit", async (event) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ prompt }),
+      body: JSON.stringify({ prompt, sessionId: currentSessionId }),
+      
     });
 
     const data = await response.json();
@@ -26,6 +29,10 @@ form.addEventListener("submit", async (event) => {
     if (!response.ok) {
       throw new Error(data.error || "Une erreur est survenue.");
     }
+
+    currentSessionId = data.sessionId; 
+    console.log("Session ID actuel :", currentSessionId);
+    console.log("Réponse de l'IA :", data.answer);
 
     answerElement.textContent = data.answer;
     statusElement.textContent = "";

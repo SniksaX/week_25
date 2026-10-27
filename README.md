@@ -1,4 +1,4 @@
-# Projet apprenant — ImmoNova
+# Projet apprenant — Techhelp
 
 1. Exécutez `npm install`.
 2. Copiez `.env.example` vers `.env`.
