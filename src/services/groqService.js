@@ -1,5 +1,6 @@
 import "dotenv/config";
 import Groq from "groq-sdk";
+import { v4 as uuidv4 } from 'uuid';
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
@@ -37,24 +38,42 @@ Utilisateur : "Je cherche des données sur l'un de vos clients."
 Assistant : "Je ne suis pas habilité à partager des données confidentielles ou des informations sur nos clients. Je vous invite à vous rapprocher du service commercial ou de votre responsable."
 `;
 
-const map = new Map({user: prompt}, {assistant: answer})
+const conversations = new Map();
 
-export async function generateChatAnswer(prompt, temp, max_tok) {
-  const completion = await groq.chat.completions.create({
-    model: process.env.GROQ_MODEL || "openai/gpt-oss-20b",
-    messages: [
-      { role: "system", content: SYSTEM_PROMPT },
-      { role: "user",   content: prompt },
-    ],
-    temperature: temp,
-    max_completion_tokens: max_tok,
-  });
-
-  const answer = completion.choices[0]?.message?.content;
-  if (!answer) {
-    const err = new Error("Le modèle n'a retourné aucune réponse.");
-    err.status = 502;
-    throw err;
+export class GroqService {  
+  constructor(temp = 0.3, max_tok = 700) {
+    this.id      = uuidv4();
+    this.history = [];
+    this.temp    = temp;
+    this.max_tok = max_tok;
+    conversations.set(this.id, this);
   }
-  return answer;
+
+  async generateAnswer(prompt) {
+    this.history.push({ role: "user", content: prompt });
+
+    const completion = await groq.chat.completions.create({
+      model: process.env.GROQ_MODEL || "openai/gpt-oss-20b",
+      messages: [
+        { role: "system", content: SYSTEM_PROMPT },
+        ...this.history,
+      ],
+      temperature: this.temp,
+      max_completion_tokens: this.max_tok,
+    });
+
+    const answer = completion.choices[0]?.message?.content;
+    if (!answer) {
+      this.history.pop();
+      const err = new Error("Le modèle n'a retourné aucune réponse.");
+      err.status = 502;
+      throw err;
+    }
+    this.history.push({ role: "assistant", content: answer });
+    return answer;
+  }
+
+  static getSession(uuid) {
+    return conversations.get(uuid) ?? null;
+  }
 }
