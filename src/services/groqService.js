@@ -1,8 +1,9 @@
 import "dotenv/config";
 import Groq from "groq-sdk";
 import { v4 as uuidv4 } from 'uuid';
+import { createFileINE } from "./intent.js";
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+export const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 const SYSTEM_PROMPT = `
 Tu es l'assistant virtuel officiel du support informatique de l'entreprise TechHelp.
@@ -75,23 +76,13 @@ export class GroqService {
       this.history = this.history.slice(-10);
     }
 
+    createFileINE(answer);
+
     return answer;
+
   }
 
   static getSession(uuid) {
     return conversations.get(uuid) ?? null;
-  }
-
-  getIntent(prompt) {
-    const activateMemory = ["enregistre", "sauvgarde", "souviens-toi", "souviens toi", "rappel toi"];
-    const wantsMemory = activateMemory.some(word => prompt.toLowerCase().includes(word));
-    if (!wantsMemory) {
-      return false
-    }
-    return true
-  }
-
-  saveInformation(savePrompt) {
-
   }
 }

@@ -1,5 +1,6 @@
 import {readFile, writeFile, mkdir} from "node:fs/promises"
 import { dirname } from "node:path";
+import { groq } from "./groqService.js";
 
 const FILE = new URL("../../memory.json", import.meta.url).pathname;
 
@@ -7,7 +8,7 @@ const PROMPT_INTENT= `
 Tu es un moteur d'extraction d'informations chargé de transformer une demande
 utilisateur en une entrée de mémoire structurée.
 
-RÔLE
+# RÔLE
 Analyser le message de l'utilisateur et en extraire l'information qu'il souhaite
 faire mémoriser. Tu ne converses pas : tu produis uniquement une sortie JSON.
 
@@ -21,7 +22,7 @@ sans balises Markdown, sans commentaires. Le schéma est le suivant :
   "additional_info": string | null   // complément éventuel, sinon null
 }
 
-RÈGLES
+# RÈGLES
 1. "trigger" décrit le déclencheur à la troisième personne (ex. « L'utilisateur
    demande à mémoriser son prénom »).
 2. "information" reformule le fait de façon autonome, compréhensible hors contexte
@@ -35,7 +36,7 @@ RÈGLES
    { "trigger": null, "information": null, "additional_info": null }
 6. La langue des valeurs suit celle de l'utilisateur.
 
-EXEMPLE
+# EXEMPLE
 Entrée  : « Retiens que je m'appelle Siraj, je suis grand. »
 Sortie  :
 {
@@ -44,7 +45,7 @@ Sortie  :
   "additional_info": "L'utilisateur se décrit comme grand."
 }
 
-EXEMPLE (information absente)
+# EXEMPLE (information absente)
 Entrée  : « Retiens que je m'appelle Siraj. »
 Sortie  :
 {
@@ -54,14 +55,57 @@ Sortie  :
 }
 `
 
-const createFileINE = (file) => {
-    try {
-     
-    } catch {
+export const createFileINE = async (prompt) => {
 
+
+    const completion = await groq.chat.completions.create({
+      model: process.env.GROQ_MODEL || "openai/gpt-oss-20b",
+      messages: [
+        { role: "system", content: PROMPT_INTENT },
+        { role: "user", content: prompt }
+      ],
+      temperature: 0.2,
+      max_completion_tokens: 500,
+    });
+
+    const answer = completion.choices[0]?.message?.content;
+    if (!answer) {
+      const err = new Error("Le modèle n'a retourné aucune réponse.");
+      err.status = 502;
+      throw err;
     }
+
+      await saveInfo(answer);
+
+    return answer;
+    
+
 }
 
-const saveInfo = () => {
+const saveInfo = async (info) => {
 
+   const answer = JSON.parse(info);
+   
+   if (!answer.trigger && !answer.information && !answer.additional_info) {
+      return;
+   }
+
+   const fileData = {
+      trigger: answer.trigger,
+      information: answer.information,
+      additional_info: answer.additional_info
+   }
+
+   try {
+      await  writeFile( FILE, JSON.stringify(fileData, null, 2), 'utf8');
+      console.log("Fichier data.json créé avec succès !");
+   } catch (error) {
+      console.error("Erreur lors de l'écriture du fichier :", error);
+   }
 }
+
+const intentService = {
+   createFileINE
+}
+
+
