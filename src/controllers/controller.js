@@ -16,6 +16,7 @@ export async function chatCompletion(req, res) {
   }
 
   try {
+    
     const answer = await session.generateAnswer(prompt);
     return res.json({ sessionId: session.id, answer });
   } catch (error) {

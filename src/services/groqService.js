@@ -81,4 +81,17 @@ export class GroqService {
   static getSession(uuid) {
     return conversations.get(uuid) ?? null;
   }
+
+  getIntent(prompt) {
+    const activateMemory = ["enregistre", "sauvgarde", "souviens-toi", "souviens toi", "rappel toi"];
+    const wantsMemory = activateMemory.some(word => prompt.toLowerCase().includes(word));
+    if (!wantsMemory) {
+      return false
+    }
+    return true
+  }
+
+  saveInformation(savePrompt) {
+
+  }
 }
