@@ -1,6 +1,6 @@
-import {readFile, writeFile, mkdir} from "node:fs/promises"
+import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { dirname } from "node:path";
-import { groq } from "./groqService.js";
+import { groq } from "./groqService.js";   
 
 const FILE = new URL("../../memory.json", import.meta.url).pathname;
 
@@ -17,9 +17,9 @@ Tu réponds EXCLUSIVEMENT avec un objet JSON valide, sans texte avant ou après,
 sans balises Markdown, sans commentaires. Le schéma est le suivant :
 
 {
-  "trigger":       string,   // ce qui a déclenché la mémorisation, formulé comme un fait
-  "information":   string,   // l'information à retenir, reformulée clairement
-  "additional_info": string | null   // complément éventuel, sinon null
+  "trigger":       string,   
+  "information":   string,   
+  "additional_info": string | null   
 }
 
 # RÈGLES
@@ -55,57 +55,92 @@ Sortie  :
 }
 `
 
-export const createFileINE = async (prompt) => {
+const MEMORY_TRIGGERS = [
+  "enregistre", "sauvegarde", "sauvgarde", "souviens", "souviens-toi",
+  "souviens toi", "rappel toi", "rappelle", "mémorise", "memorise",
+  "retiens", "note que", "garde en mémoire",
+];
 
+const norm = (s) =>
+  s.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
 
-    const completion = await groq.chat.completions.create({
-      model: process.env.GROQ_MODEL || "openai/gpt-oss-20b",
-      messages: [
-        { role: "system", content: PROMPT_INTENT },
-        { role: "user", content: prompt }
-      ],
-      temperature: 0.2,
-      max_completion_tokens: 500,
-    });
-
-    const answer = completion.choices[0]?.message?.content;
-    if (!answer) {
-      const err = new Error("Le modèle n'a retourné aucune réponse.");
-      err.status = 502;
-      throw err;
-    }
-
-      await saveInfo(answer);
-
-    return answer;
-    
-
+export function detectMemoryIntent(prompt) {
+  const text = norm(prompt);
+  return MEMORY_TRIGGERS.some((w) => text.includes(norm(w)));
 }
 
-const saveInfo = async (info) => {
-
-   const answer = JSON.parse(info);
-   
-   if (!answer.trigger && !answer.information && !answer.additional_info) {
-      return;
-   }
-
-   const fileData = {
-      trigger: answer.trigger,
-      information: answer.information,
-      additional_info: answer.additional_info
-   }
-
-   try {
-      await  writeFile( FILE, JSON.stringify(fileData, null, 2), 'utf8');
-      console.log("Fichier data.json créé avec succès !");
-   } catch (error) {
-      console.error("Erreur lors de l'écriture du fichier :", error);
-   }
+async function loadMemory() {
+  try {
+    const raw = await readFile(FILE, "utf8");
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [parsed];
+  } catch (e) {
+    if (e.code === "ENOENT") return [];   
+    throw e;
+  }
 }
 
-const intentService = {
-   createFileINE
+async function appendMemory(entry) {
+  const existing = await loadMemory();          
+  existing.push(entry);                         
+  await mkdir(dirname(FILE), { recursive: true });
+  await writeFile(FILE, JSON.stringify(existing, null, 2), "utf8");
+  return existing;
+}
+
+export async function extractAndSaveMemory(prompt) {
+  const completion = await groq.chat.completions.create({
+    model: process.env.GROQ_MODEL || "openai/gpt-oss-20b",
+    messages: [
+      { role: "system", content: PROMPT_INTENT },
+      { role: "user",   content: prompt },
+    ],
+    temperature: 0.2,
+    max_completion_tokens: 500,
+    response_format: { type: "json_object" },   
+  });
+
+  const raw = completion.choices[0]?.message?.content;
+  if (!raw) {
+    const err = new Error("Le modèle n'a retourné aucune réponse.");
+    err.status = 502;
+    throw err;
+  }
+
+  let data;
+  try {
+    data = JSON.parse(raw);
+  } catch {
+    const err = new Error("Réponse JSON invalide.");
+    err.status = 502;
+    throw err;
+  }
+
+  
+  if (!data.trigger && !data.information && !data.additional_info) {
+    return null;
+  }
+
+  const entry = {
+    trigger:         data.trigger         ?? null,
+    information:     data.information     ?? null,
+    additional_info: data.additional_info ?? null,
+    createdAt:       new Date().toISOString(),
+  };
+
+  await appendMemory(entry);
+  return entry;
 }
 
 
+export async function getMemoryAsText() {
+  const memory = await loadMemory();
+  if (memory.length === 0) return null;
+
+  return memory
+    .map((m, i) => {
+      const extra = m.additional_info ? ` — ${m.additional_info}` : "";
+      return `${i + 1}. ${m.information ?? m.trigger}${extra}`;
+    })
+    .join("\n");
+}

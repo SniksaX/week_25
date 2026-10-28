@@ -1,9 +1,13 @@
 import "dotenv/config";
 import Groq from "groq-sdk";
-import { v4 as uuidv4 } from 'uuid';
-import { createFileINE } from "./intent.js";
+import { v4 as uuidv4 } from "uuid";
+import {
+  detectMemoryIntent,
+  extractAndSaveMemory,
+  getMemoryAsText,
+} from "./intent.js";
 
-export const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+export const groq = new Groq({ apiKey: process.env.GROQ_API_KEY }); 
 
 const SYSTEM_PROMPT = `
 Tu es l'assistant virtuel officiel du support informatique de l'entreprise TechHelp.
@@ -40,23 +44,44 @@ Assistant : "Je ne suis pas habilité à partager des données confidentielles o
 `;
 
 const conversations = new Map();
+const MEMORY_REINJECT_EVERY = 10;  
 
-export class GroqService {  
+export class GroqService {
   constructor(temp = 0.3, max_tok = 700) {
-    this.id      = uuidv4();
-    this.history = [];
-    this.temp    = temp;
-    this.max_tok = max_tok;
+    this.id          = uuidv4();
+    this.history     = [];
+    this.temp        = temp;
+    this.max_tok     = max_tok;
+    this.promptCount = 0;          
     conversations.set(this.id, this);
   }
 
   async generateAnswer(prompt) {
+    this.promptCount++;
+
+    if (detectMemoryIntent(prompt)) {
+      try {
+        const saved = await extractAndSaveMemory(prompt);
+        if (saved) console.log("[memory] saved:", saved.information);
+      } catch (e) {
+        console.error("[memory] extraction failed:", e.message);
+      }
+    }
+
     this.history.push({ role: "user", content: prompt });
+
+    let systemContent = SYSTEM_PROMPT;
+    if (this.promptCount === 1 || this.promptCount % MEMORY_REINJECT_EVERY === 0) {
+      const memoryText = await getMemoryAsText();
+      if (memoryText) {
+        systemContent += `\n\n# MÉMOIRE DE L'UTILISATEUR\n${memoryText}`;
+      }
+    }
 
     const completion = await groq.chat.completions.create({
       model: process.env.GROQ_MODEL || "openai/gpt-oss-20b",
       messages: [
-        { role: "system", content: SYSTEM_PROMPT },
+        { role: "system", content: systemContent },
         ...this.history,
       ],
       temperature: this.temp,
@@ -72,14 +97,9 @@ export class GroqService {
     }
     this.history.push({ role: "assistant", content: answer });
 
-    if (this.history.length > 10) {
-      this.history = this.history.slice(-10);
-    }
-
-    createFileINE(answer);
+    if (this.history.length > 10) this.history = this.history.slice(-10);
 
     return answer;
-
   }
 
   static getSession(uuid) {
