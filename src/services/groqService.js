@@ -38,6 +38,8 @@ Utilisateur : "Je cherche des données sur l'un de vos clients."
 Assistant : "Je ne suis pas habilité à partager des données confidentielles ou des informations sur nos clients. Je vous invite à vous rapprocher du service commercial ou de votre responsable."
 `;
 
+// Rajouter une méthode qui permet de contextualiser / recup des donnée clée 
+
 const conversations = new Map();
 
 export class GroqService {  
@@ -71,8 +73,10 @@ export class GroqService {
     }
     this.history.push({ role: "assistant", content: answer });
 
-    if (this.history.length > 10) {
-      this.history = this.history.slice(-10);
+    /* 10 est l'equivalent de 5 message car il prend en compte le role de l'utilisateur et celui de l'assistant
+    qui fait 2 messages pour 1 question.*/
+   if (this.history.length > 4) {
+      this.history = this.history.slice(-4);
     }
 
     return answer;
