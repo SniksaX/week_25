@@ -218,7 +218,7 @@ function setAdminMode(enabled) {
 
   profileAvatar.textContent = enabled ? "AD" : "TM";
   profileName.textContent = enabled ? "Administrateur" : "Thomas Martin";
-  profileCompany.textContent = enabled ? "Nexora Support" : "Ardent Groupe";
+  profileCompany.textContent = enabled ? "TechHelp Support" : "Ardent Groupe";
 
   if (enabled) {
     refreshTicketsBadge();
