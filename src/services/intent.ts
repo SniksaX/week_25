@@ -1,8 +1,10 @@
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { dirname } from "node:path";
-import { groq } from "./groqService.js";   
+import { fileURLToPath } from "node:url";
+import { GROQ_MODEL } from "../config.ts";
+import { groq } from "./groqService.ts";
 
-const FILE = new URL("../../memory.json", import.meta.url).pathname;
+const FILE = fileURLToPath(new URL("../../memory.json", import.meta.url));
 
 const PROMPT_INTENT= `
 Tu es un moteur d'extraction d'informations chargé de transformer une demande
@@ -17,9 +19,9 @@ Tu réponds EXCLUSIVEMENT avec un objet JSON valide, sans texte avant ou après,
 sans balises Markdown, sans commentaires. Le schéma est le suivant :
 
 {
-  "trigger":       string,   
-  "information":   string,   
-  "additional_info": string | null   
+  "trigger":       string,
+  "information":   string,
+  "additional_info": string | null
 }
 
 # RÈGLES
@@ -61,70 +63,85 @@ const MEMORY_TRIGGERS = [
   "retiens", "note que", "garde en mémoire",
 ];
 
-const norm = (s) =>
+interface MemoryEntry {
+  trigger: string | null;
+  information: string | null;
+  additional_info: string | null;
+  createdAt: string;
+}
+
+const norm = (s: string) =>
   s.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
 
-export function detectMemoryIntent(prompt) {
+export function detectMemoryIntent(prompt: string): boolean {
   const text = norm(prompt);
   return MEMORY_TRIGGERS.some((w) => text.includes(norm(w)));
 }
 
-async function loadMemory() {
+async function loadMemory(): Promise<MemoryEntry[]> {
   try {
     const raw = await readFile(FILE, "utf8");
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [parsed];
+    const parsed: unknown = JSON.parse(raw);
+    return Array.isArray(parsed) ? (parsed as MemoryEntry[]) : [parsed as MemoryEntry];
   } catch (e) {
-    if (e.code === "ENOENT") return [];   
+    if (e instanceof Error && (e as NodeJS.ErrnoException).code === "ENOENT") return [];
     throw e;
   }
 }
 
-async function appendMemory(entry) {
-  const existing = await loadMemory();          
-  existing.push(entry);                         
+async function appendMemory(entry: MemoryEntry): Promise<MemoryEntry[]> {
+  const existing = await loadMemory();
+  existing.push(entry);
   await mkdir(dirname(FILE), { recursive: true });
   await writeFile(FILE, JSON.stringify(existing, null, 2), "utf8");
+  console.log("[memory] fichier écrit :", FILE);
   return existing;
 }
 
-export async function extractAndSaveMemory(prompt) {
+export async function extractAndSaveMemory(
+  prompt: string,
+): Promise<MemoryEntry | null> {
   const completion = await groq.chat.completions.create({
-    model: process.env.GROQ_MODEL || "openai/gpt-oss-20b",
+    model: GROQ_MODEL,
     messages: [
       { role: "system", content: PROMPT_INTENT },
       { role: "user",   content: prompt },
     ],
     temperature: 0.2,
     max_completion_tokens: 500,
-    response_format: { type: "json_object" },   
+    response_format: { type: "json_object" },
   });
 
-  const raw = completion.choices[0]?.message?.content;
+  const choice = completion.choices[0];
+  const raw = choice?.message?.content;
+  console.log("[memory] finish_reason:", choice?.finish_reason, "| raw:", raw);
   if (!raw) {
-    const err = new Error("Le modèle n'a retourné aucune réponse.");
+    const err: any = new Error("Le modèle n'a retourné aucune réponse.");
     err.status = 502;
     throw err;
   }
 
-  let data;
+  let data: {
+    trigger?: unknown;
+    information?: unknown;
+    additional_info?: unknown;
+  };
   try {
-    data = JSON.parse(raw);
+    data = JSON.parse(raw) as typeof data;
   } catch {
-    const err = new Error("Réponse JSON invalide.");
+    const err: any = new Error("Réponse JSON invalide.");
     err.status = 502;
     throw err;
   }
 
-  
   if (!data.trigger && !data.information && !data.additional_info) {
     return null;
   }
 
-  const entry = {
-    trigger:         data.trigger         ?? null,
-    information:     data.information     ?? null,
-    additional_info: data.additional_info ?? null,
+  const entry: MemoryEntry = {
+    trigger:         typeof data.trigger === "string" ? data.trigger : null,
+    information:     typeof data.information === "string" ? data.information : null,
+    additional_info: typeof data.additional_info === "string" ? data.additional_info : null,
     createdAt:       new Date().toISOString(),
   };
 
