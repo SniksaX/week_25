@@ -55,13 +55,8 @@
             </select>
           </div>
           <div class="profile">
-              <div class="profile-avatar" id="profile-avatar">TM</div>
-              <div>
-                <p class="profile-name" id="profile-name">Thomas Martin</p>
-                <p class="profile-company" id="profile-company">Ardent Groupe</p>
-              </div>
-              <button class="profile-more" id="admin-login-button" type="button" title="Connexion admin">🔑</button>
-              <button class="profile-more" id="admin-logout-button" type="button" title="Se déconnecter" hidden>⏻</button>
+              <button class="profile-more" id="admin-login-button" type="button" title="Connexion admin">Connexion Admin</button>
+              <button class="profile-more" id="admin-logout-button" type="button" title="Se déconnecter" hidden>Se déconnecter</button>
           </div>
         </div>
       </aside>
@@ -73,7 +68,7 @@
           <div class="assistant-avatar">N<span class="assistant-orbit"></span></div>
           <div class="assistant-info">
             <div class="assistant-title-row">
-              <p class="assistant-name">Nova</p>
+              <p class="assistant-name">Gen-IALLE</p>
               <span class="ai-badge">Assistant IA</span>
             </div>
             <p class="assistant-status"><span></span> En ligne · Réponse immédiate</p>
@@ -89,11 +84,10 @@
 
         <div class="composer-area">
           <form class="composer" id="chat-form">
-            <button class="attach-button" type="button" aria-label="Joindre un fichier">📎</button>
             <input id="prompt" type="text" placeholder="Décrivez votre problème informatique…" autocomplete="off" />
             <button class="send-button" id="send-button" type="submit" aria-label="Envoyer" disabled>➤</button>
           </form>
-          <p class="composer-note">Nova peut faire des erreurs. Vérifiez les informations importantes.</p>
+          <p class="composer-note">Gen-IALLE peut faire des erreurs. Vérifiez les informations importantes.</p>
         </div>
       </main>
 
@@ -107,12 +101,6 @@
           <label class="modal-label" for="admin-password">Mot de passe</label>
           <input class="modal-input" id="admin-password" type="password" required autocomplete="current-password" />
 
-          <p class="modal-error" id="login-error" role="alert"></p>
-
-          <div class="modal-actions">
-            <button class="modal-button modal-button--ghost" id="login-cancel" type="button">Annuler</button>
-            <button class="modal-button" type="submit">Se connecter</button>
-          </div>
         </form>
       </dialog>
 

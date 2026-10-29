@@ -1,0 +1,151 @@
+[
+  {
+    "id": "pwd_01",
+    "categorie": "Mot de passe",
+    "mots_cles": ["mot de passe", "oublié", "connexion", "session", "accès", "bloqué", "identifiant"],
+    "question": "J'ai oublié mon mot de passe ou mon compte est bloqué",
+    "reponse_llm": "Je ne peux pas vous demander votre mot de passe pour des raisons de sécurité, et je ne peux pas le réinitialiser à distance. Voici la procédure standard :",
+    "etapes": [
+      "Rendez-vous sur le portail d'entreprise (indiquez l'URL ici).",
+      "Cliquez sur 'Mot de passe oublié'.",
+      "Suivez les instructions envoyées sur votre adresse e-mail professionnelle.",
+      "Si vous êtes bloqué après plusieurs tentatives, patientez 15 minutes avant de réessayer."
+    ],
+    "escalade_technicien": true,
+    "message_escalade": "Si vous n'avez pas accès à votre e-mail de secours ou si votre compte est verrouillé, je vous redirige vers un technicien."
+  },
+  {
+    "id": "print_01",
+    "categorie": "Imprimante",
+    "mots_cles": ["imprimante", "imprimer", "bourrage", "papier", "encre", "hors ligne", "scanner", "impression"],
+    "question": "Mon imprimante ne fonctionne pas ou est hors ligne",
+    "reponse_llm": "Pas de panique, c'est un problème courant. Vérifions ensemble étape par étape :",
+    "etapes": [
+      "Vérifiez que l'imprimante est allumée et connectée au réseau (câble ou Wi-Fi).",
+      "Vérifiez qu'il y a du papier et de l'encre.",
+      "Sur votre ordinateur, allez dans 'Périphériques et imprimantes', faites un clic droit sur l'imprimante et sélectionnez 'Voir ce qui s'imprime' pour annuler les tâches bloquées.",
+      "Redémarrez l'imprimante et votre ordinateur."
+    ],
+    "escalade_technicien": true,
+    "message_escalade": "Si l'imprimante reste hors ligne, un technicien doit vérifier l'adresse IP de l'imprimante."
+  },
+  {
+    "id": "wifi_01",
+    "categorie": "Wi-Fi",
+    "mots_cles": ["wifi", "wi-fi", "internet", "réseau", "connexion", "box", "déconnexion", "lent"],
+    "question": "Je n'ai plus accès au Wi-Fi",
+    "reponse_llm": "Je vais vous aider à rétablir votre connexion. Dans 90% des cas, ces étapes suffisent :",
+    "etapes": [
+      "Vérifiez que le Wi-Fi est activé sur votre ordinateur.",
+      "Déconnectez-vous du réseau et reconnectez-vous.",
+      "Si cela ne fonctionne pas, redémarrez votre ordinateur.",
+      "Vérifiez si vos collègues à proximité ont le même problème (pour savoir si cela vient de votre machine ou du réseau global)."
+    ],
+    "escalade_technicien": false,
+    "message_escalade": null
+  },
+  {
+    "id": "vpn_01",
+    "categorie": "VPN",
+    "mots_cles": ["vpn", "accès distant", "télétravail", "connexion sécurisée", "serveur", "distance"],
+    "question": "Je n'arrive pas à me connecter au VPN",
+    "reponse_llm": "Voici les vérifications de base pour le VPN :",
+    "etapes": [
+      "Vérifiez que vous avez une connexion Internet active.",
+      "Assurez-vous que votre logiciel VPN est à jour.",
+      "Vérifiez que vous utilisez le bon serveur (adresse fournie par l'entreprise).",
+      "Essayez de vous déconnecter et de vous reconnecter."
+    ],
+    "escalade_technicien": false,
+    "message_escalade": null
+  },
+  {
+    "id": "soft_01",
+    "categorie": "Logiciels",
+    "mots_cles": ["installation", "logiciel", "application", "téléchargement", "erreur", "mise à jour", "catalogue"],
+    "question": "Je dois installer un nouveau logiciel",
+    "reponse_llm": "Pour des raisons de sécurité, je ne peux pas installer de logiciels à distance. Voici la marche à suivre :",
+    "etapes": [
+      "Vérifiez si le logiciel se trouve dans le catalogue d'applications de l'entreprise.",
+      "Si oui, lancez l'installation depuis le catalogue.",
+      "Si le logiciel n'est pas autorisé, vous devez faire une demande spécifique."
+    ],
+    "escalade_technicien": true,
+    "message_escalade": "L'installation nécessite des droits administrateur. Je vous redirige vers un technicien pour valider votre demande."
+  },
+  {
+    "id": "mail_01",
+    "categorie": "Messagerie",
+    "mots_cles": ["mail", "outlook", "email", "e-mail", "boîte pleine", "réception", "teams", "message"],
+    "question": "Je ne reçois plus mes e-mails ou ma boîte est pleine",
+    "reponse_llm": "Vérifions ensemble votre messagerie. C'est souvent lié à un problème de stockage :",
+    "etapes": [
+      "Vérifiez votre quota de stockage (boîte aux lettres pleine).",
+      "Videz votre dossier 'Éléments supprimés' et 'Courrier indésirable'.",
+      "Vérifiez que vous êtes bien connecté au serveur d'entreprise (souvent lié au VPN).",
+      "Assurez-vous que votre application (Outlook, Teams) est à jour."
+    ],
+    "escalade_technicien": false,
+    "message_escalade": null
+  },
+  {
+    "id": "hw_01",
+    "categorie": "Matériel",
+    "mots_cles": ["écran", "clavier", "souris", "matériel", "noir", "clignote", "allumé", "câble", "batterie", "charge"],
+    "question": "Mon matériel (écran, clavier) ne répond plus",
+    "reponse_llm": "Faisons quelques vérifications physiques de base :",
+    "etapes": [
+      "Vérifiez les câbles de connexion (débranchez et rebranchez).",
+      "Pour un ordinateur portable, vérifiez si la batterie est bien chargée ou si le chargeur fonctionne.",
+      "Essayez de brancher l'écran sur un autre port (HDMI, DisplayPort, USB).",
+      "Si le clavier ou la souris ne répond plus, changez les piles ou testez sur un autre port USB."
+    ],
+    "escalade_technicien": true,
+    "message_escalade": "Si le matériel est physiquement défectueux ou ne s'allume plus du tout, je vous redirige vers un technicien pour un diagnostic ou un remplacement."
+  },
+  {
+    "id": "perf_01",
+    "categorie": "Performances",
+    "mots_cles": ["lent", "lenteur", "plante", "ralenti", "redémarrage", "bloque", "freeze", "chauffe"],
+    "question": "Mon ordinateur est très lent ou plante régulièrement",
+    "reponse_llm": "Un ordinateur lent peut avoir plusieurs causes. Voici les actions à essayer :",
+    "etapes": [
+      "Fermez les applications et onglets de navigateur inutilisés.",
+      "Vérifiez l'espace libre sur votre disque dur (il faut idéalement > 15% libre).",
+      "Redémarrez complètement l'ordinateur (ne vous contentez pas de le mettre en veille).",
+      "Vérifiez si des mises à jour système sont en attente."
+    ],
+    "escalade_technicien": false,
+    "message_escalade": null
+  },
+  {
+    "id": "sec_01",
+    "categorie": "Sécurité",
+    "mots_cles": ["phishing", "hameçonnage", "virus", "mail suspect", "lien bizarre", "piratage", "spam", "usurpation"],
+    "question": "J'ai reçu un e-mail suspect ou j'ai cliqué sur un lien bizarre",
+    "reponse_llm": "La sécurité est notre priorité. Voici les consignes à suivre immédiatement :",
+    "etapes": [
+      "Ne cliquez sur aucun autre lien et n'ouvrez aucune pièce jointe.",
+      "Si vous avez cliqué, ne saisissez plus aucun mot de passe.",
+      "Signalez l'e-mail comme 'Courrier indésirable' ou 'Phishing' dans Outlook.",
+      "Déconnectez votre ordinateur du réseau (Wi-Fi ou câble) si vous pensez avoir téléchargé un fichier dangereux."
+    ],
+    "escalade_technicien": true,
+    "message_escalade": "Tout incident de sécurité doit être traité immédiatement. Je vous redirige sans attendre vers un technicien pour sécuriser votre poste."
+  },
+  {
+    "id": "net_01",
+    "categorie": "Réseau",
+    "mots_cles": ["lecteur réseau", "partage", "dossier", "accès refusé", "disque", "fichier", "introuvable", "chemin"],
+    "question": "Je n'ai plus accès à mes dossiers partagés",
+    "reponse_llm": "Vérifions l'accès à vos fichiers d'entreprise :",
+    "etapes": [
+      "Vérifiez que vous êtes bien connecté au réseau de l'entreprise ou au VPN.",
+      "Redémarrez votre ordinateur pour rafraîchir les connexions réseau.",
+      "Essayez de déconnecter le lecteur réseau et de le reconnecter manuellement.",
+      "Vérifiez que vous n'êtes pas connecté avec un mauvais compte utilisateur."
+    ],
+    "escalade_technicien": true,
+    "message_escalade": "Si l'accès vous est toujours refusé, il se peut que vos droits aient changé. Je vous redirige vers un technicien pour vérifier vos autorisations."
+  }
+]

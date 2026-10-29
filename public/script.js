@@ -176,7 +176,7 @@ menuButton.addEventListener("click", () => toggleSidebar(true));
 overlay.addEventListener("click", () => toggleSidebar(false));
 
 // Démarrage
-addMessage("assistant", "Bonjour Thomas, je suis Nova, votre assistante support. Comment puis-je vous aider aujourd'hui ?");
+addMessage("assistant", "Bonjour , je suis Gen-IALLE, votre assistante support. Comment puis-je vous aider aujourd'hui ?");
 showQuickQuestions();
 
 async function createSupportTicket() {
