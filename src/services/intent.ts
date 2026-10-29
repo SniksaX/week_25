@@ -1,9 +1,10 @@
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import { GROQ_MODEL } from "../config.ts";
 import { groq } from "./groqService.ts";
 
-const FILE = new URL("../../memory.json", import.meta.url).pathname;
+const FILE = fileURLToPath(new URL("../../memory.json", import.meta.url));
 
 const PROMPT_INTENT= `
 Tu es un moteur d'extraction d'informations chargé de transformer une demande
@@ -93,6 +94,7 @@ async function appendMemory(entry: MemoryEntry): Promise<MemoryEntry[]> {
   existing.push(entry);
   await mkdir(dirname(FILE), { recursive: true });
   await writeFile(FILE, JSON.stringify(existing, null, 2), "utf8");
+  console.log("[memory] fichier écrit :", FILE);
   return existing;
 }
 
@@ -110,7 +112,9 @@ export async function extractAndSaveMemory(
     response_format: { type: "json_object" },
   });
 
-  const raw = completion.choices[0]?.message?.content;
+  const choice = completion.choices[0];
+  const raw = choice?.message?.content;
+  console.log("[memory] finish_reason:", choice?.finish_reason, "| raw:", raw);
   if (!raw) {
     const err: any = new Error("Le modèle n'a retourné aucune réponse.");
     err.status = 502;
