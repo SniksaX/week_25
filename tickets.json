@@ -1,0 +1,18 @@
+[
+  {
+    "id": "4774f3c3-4710-444d-9474-29188ff1a224",
+    "userEmail": "user592@yahoo.fr",
+    "context": "comment je me connect au vpn ?",
+    "proposed": "Bonjour Siraj,\n\nVoici les étapes générales pour vous connecter au VPN de TechHelp :\n\n1. **Ouvrir le client VPN**  \n   - Sur Windows : lancez l’application « TechHelp VPN » (installée par défaut sur votre poste).  \n   - Sur macOS : ouvrez l’application « TechHelp VPN » depuis le dossier Applications.  \n   - Sur mobile : utilisez l’app « TechHelp VPN » disponible sur App Store / Google Play.\n\n2. **Saisir vos identifiants**  \n   - Nom d’utilisateur : votre identifiant TechHelp (ex : siraj.t).  \n   - Mot de passe : celui que vous avez reçu lors de votre intégration.  \n   > *Note : je ne peux pas récupérer votre mot de passe. Si vous l’avez oublié, utilisez le portail interne de réinitialisation.*\n\n3. **Choisir le serveur**  \n   - Sélectionnez le serveur « HQ‑Paris » (ou celui recommandé par votre équipe).  \n   - Cliquez sur **Connecter**.\n\n4. **Vérifier la connexion**  \n   - Une fois connecté, l’icône VPN doit passer en vert.  \n   - Vous pouvez tester l’accès à un intranet interne (ex : `http://intranet.techhelp.local`).\n\n5. **Déconnexion**  \n   - Lorsque vous avez terminé, cliquez sur **Déconnecter** dans l’interface du client.\n\n---\n\n### Problèmes fréquents\n\n| Symptom | Solution rapide |\n|---------|-----------------|\n| Impossible de se connecter | Vérifiez que votre pare‑feu Windows ne bloque pas le port 443. |\n| Erreur « authentification échouée » | Assurez‑vous d’avoir bien entré votre mot de passe. Si le problème persiste, réinitialisez votre mot de passe via le portail. |\n| VPN se déconnecte automatiquement | Redémarrez votre poste et réessayez. Si le problème continue, contactez le support. |\n\n---\n\nSi vous rencontrez un problème que je ne peux pas résoudre ici, n’hésitez pas à ouvrir un ticket via le portail interne ou à me dire que vous souhaitez être mis en relation avec un technicien humain. Bonne connexion !",
+    "reason": "aze",
+    "createdAt": "2026-10-29T15:42:45.341Z"
+  },
+  {
+    "id": "8e65dfb1-521e-4bb9-8654-2c022086d8c2",
+    "userEmail": "user949@hotmail.fr",
+    "context": "salit comment vipian ?",
+    "proposed": "Bonjour Siraj,\n\nJe ne suis pas sûr de bien comprendre votre question concernant « vipian ». Pourriez‑vous préciser ce que vous souhaitez savoir ? Je suis là pour vous aider.",
+    "reason": "vipian pas marchi",
+    "createdAt": "2026-10-29T15:48:47.968Z"
+  }
+]
