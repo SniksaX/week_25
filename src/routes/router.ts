@@ -1,6 +1,6 @@
 import express from "express";
-import { chatCompletion } from "../controllers/controller.js";
-import { GroqService } from "../services/groqService.js";
+import { chatCompletion } from "../controllers/controller.ts";
+import { GroqService } from "../services/groqService.ts";
 
 export const UseRouter = express.Router();
 

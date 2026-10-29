@@ -1,13 +1,14 @@
-import "dotenv/config";
 import Groq from "groq-sdk";
+import type { ChatCompletionMessageParam } from "groq-sdk/resources/chat/completions.js";
 import { v4 as uuidv4 } from "uuid";
+import { GROQ_API_KEY, GROQ_MODEL } from "../config.ts";
 import {
   detectMemoryIntent,
   extractAndSaveMemory,
   getMemoryAsText,
-} from "./intent.js";
+} from "./intent.ts";
 
-export const groq = new Groq({ apiKey: process.env.GROQ_API_KEY }); 
+export const groq = new Groq({ apiKey: GROQ_API_KEY });
 
 const SYSTEM_PROMPT = `
 Tu es l'assistant virtuel officiel du support informatique de l'entreprise TechHelp.
@@ -43,20 +44,26 @@ Utilisateur : "Je cherche des données sur l'un de vos clients."
 Assistant : "Je ne suis pas habilité à partager des données confidentielles ou des informations sur nos clients. Je vous invite à vous rapprocher du service commercial ou de votre responsable."
 `;
 
-const conversations = new Map();
-const MEMORY_REINJECT_EVERY = 10;  
+const conversations = new Map<string, GroqService>();
+const MEMORY_REINJECT_EVERY = 10;
 
 export class GroqService {
+  id: string;
+  history: ChatCompletionMessageParam[];
+  temp: number;
+  max_tok: number;
+  promptCount: number;
+
   constructor(temp = 0.3, max_tok = 700) {
     this.id          = uuidv4();
     this.history     = [];
     this.temp        = temp;
     this.max_tok     = max_tok;
-    this.promptCount = 0;          
+    this.promptCount = 0;
     conversations.set(this.id, this);
   }
 
-  async generateAnswer(prompt) {
+  async generateAnswer(prompt: string): Promise<string> {
     this.promptCount++;
 
     if (detectMemoryIntent(prompt)) {
@@ -64,7 +71,10 @@ export class GroqService {
         const saved = await extractAndSaveMemory(prompt);
         if (saved) console.log("[memory] saved:", saved.information);
       } catch (e) {
-        console.error("[memory] extraction failed:", e.message);
+        console.error(
+          "[memory] extraction failed:",
+          e instanceof Error ? e.message : e,
+        );
       }
     }
 
@@ -79,7 +89,7 @@ export class GroqService {
     }
 
     const completion = await groq.chat.completions.create({
-      model: process.env.GROQ_MODEL || "openai/gpt-oss-20b",
+      model: GROQ_MODEL,
       messages: [
         { role: "system", content: systemContent },
         ...this.history,
@@ -91,7 +101,7 @@ export class GroqService {
     const answer = completion.choices[0]?.message?.content;
     if (!answer) {
       this.history.pop();
-      const err = new Error("Le modèle n'a retourné aucune réponse.");
+      const err: any = new Error("Le modèle n'a retourné aucune réponse.");
       err.status = 502;
       throw err;
     }
@@ -102,7 +112,7 @@ export class GroqService {
     return answer;
   }
 
-  static getSession(uuid) {
+  static getSession(uuid: string): GroqService | null {
     return conversations.get(uuid) ?? null;
   }
 }
