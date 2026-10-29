@@ -1,29 +1,132 @@
 <!DOCTYPE html>
 <html lang="fr">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width,initial-scale=1">
-		<title>Techhelp</title>
-		<link rel="stylesheet" href="style.css">
-	</head>
-	<body>
-		<main class="container">
-			<h1>Techhelp</h1>
-			<p>Posez une question sur les premières étapes de votre projet immobilier.</p>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Nexora – Assistant support</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="support-app" id="app" data-theme="blue">
+      <aside class="sidebar" id="sidebar">
+        <div class="brand">
+          <div class="brand-mark">N</div>
+          <div>
+            <p class="brand-name">Nexora</p>
+            <p class="brand-subtitle">Support informatique</p>
+          </div>
+        </div>
 
-			<form id="chat-form">
-				<label for="prompt">Votre question</label>
-				<textarea id="prompt" rows="5" required></textarea>
-				<button type="submit">Interroger l'assistant</button>
-			</form>
+        <nav class="nav">
+          <p class="nav-label">Espace support</p>
+          <button class="nav-item is-active" type="button">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </svg>
+            Assistant IA
+            <span class="nav-indicator"></span>
+          </button>
+          <button class="nav-item" id="tickets-button" type="button" hidden>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9a2 2 0 0 0 0 6v3a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-3a2 2 0 0 0 0-6V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1z" />
+              <path d="M13 5v14" stroke-dasharray="2 3" />
+            </svg>
+            Tickets
+            <span class="nav-badge" id="tickets-badge">0</span>
+          </button>
+        </nav>
 
-			<section aria-live="polite">
-				<h2>Réponse</h2>
-				<p id="status"></p>
-				<div id="answer"></div>
-			</section>
-		</main>
+        <div class="sidebar-spacer"></div>
 
-		<script src="script.js"></script>
-	</body>
+        <div class="service-card">
+          <div class="service-icon">?</div>
+          <p class="service-title">Besoin d'un humain ?</p>
+          <p class="service-copy">Nos techniciens sont disponibles du lundi au vendredi.</p>
+          <button class="service-link" id="contact-support-button" type="button">Contacter le support ›</button>
+        </div>
+
+        <div class="sidebar-footer">
+          <div class="theme-setting">
+            <label class="theme-setting__label" for="theme-select">Apparence</label>
+            <select id="theme-select">
+              <option value="blue">Bleu</option>
+              <option value="black">Noir</option>
+              <option value="red">Rouge</option>
+            </select>
+          </div>
+          <div class="profile">
+              <div class="profile-avatar" id="profile-avatar">TM</div>
+              <div>
+                <p class="profile-name" id="profile-name">Thomas Martin</p>
+                <p class="profile-company" id="profile-company">Ardent Groupe</p>
+              </div>
+              <button class="profile-more" id="admin-login-button" type="button" title="Connexion admin">🔑</button>
+              <button class="profile-more" id="admin-logout-button" type="button" title="Se déconnecter" hidden>⏻</button>
+          </div>
+        </div>
+      </aside>
+      <button class="sidebar-overlay" id="overlay" type="button" aria-label="Fermer le menu"></button>
+
+      <main class="chat-panel">
+        <header class="chat-header">
+          <button class="menu-button" id="menu-button" type="button" aria-label="Ouvrir le menu">☰</button>
+          <div class="assistant-avatar">N<span class="assistant-orbit"></span></div>
+          <div class="assistant-info">
+            <div class="assistant-title-row">
+              <p class="assistant-name">Nova</p>
+              <span class="ai-badge">Assistant IA</span>
+            </div>
+            <p class="assistant-status"><span></span> En ligne · Réponse immédiate</p>
+          </div>
+          <div class="secure-label">
+            <span class="secure-icon">✓</span> Conversation sécurisée
+          </div>
+        </header>
+
+        <div class="conversation" id="conversation">
+          <div class="conversation-inner" id="messages" aria-live="polite"></div>
+        </div>
+
+        <div class="composer-area">
+          <form class="composer" id="chat-form">
+            <button class="attach-button" type="button" aria-label="Joindre un fichier">📎</button>
+            <input id="prompt" type="text" placeholder="Décrivez votre problème informatique…" autocomplete="off" />
+            <button class="send-button" id="send-button" type="submit" aria-label="Envoyer" disabled>➤</button>
+          </form>
+          <p class="composer-note">Nova peut faire des erreurs. Vérifiez les informations importantes.</p>
+        </div>
+      </main>
+
+      <dialog class="modal" id="login-dialog">
+        <form class="modal-body" id="login-form">
+          <h2 class="modal-title">Connexion administrateur</h2>
+
+          <label class="modal-label" for="admin-email">E-mail</label>
+          <input class="modal-input" id="admin-email" type="email" required autocomplete="username" />
+
+          <label class="modal-label" for="admin-password">Mot de passe</label>
+          <input class="modal-input" id="admin-password" type="password" required autocomplete="current-password" />
+
+          <p class="modal-error" id="login-error" role="alert"></p>
+
+          <div class="modal-actions">
+            <button class="modal-button modal-button--ghost" id="login-cancel" type="button">Annuler</button>
+            <button class="modal-button" type="submit">Se connecter</button>
+          </div>
+        </form>
+      </dialog>
+
+      <dialog class="modal modal--wide" id="tickets-dialog">
+        <div class="modal-body">
+          <div class="modal-header">
+            <h2 class="modal-title">Tickets de support</h2>
+            <button class="modal-close" id="tickets-close" type="button" aria-label="Fermer">✕</button>
+          </div>
+          <ul class="ticket-list" id="ticket-list"></ul>
+        </div>
+      </dialog>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
 </html>

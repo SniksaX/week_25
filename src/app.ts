@@ -1,6 +1,8 @@
 import express, { type Express, type NextFunction, type Request, type Response } from "express";
 import cors from "cors";
 import { UseRouter } from "./routes/router.ts";
+import supportRouter from "./routes/supportRouter.ts";
+
 
 export function createApp(): Express {
   const app = express();
@@ -10,6 +12,7 @@ export function createApp(): Express {
   app.use(express.static("public"));
 
   app.use("/api/ai", UseRouter);
+  app.use("/api", supportRouter);
 
   app.use((req, res) => res.status(404).json({ error: "Not found" }));
 
