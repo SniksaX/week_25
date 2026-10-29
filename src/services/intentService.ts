@@ -99,6 +99,7 @@ async function appendMemory(entry: MemoryEntry): Promise<MemoryEntry[]> {
 export async function extractAndSaveMemory(
   prompt: string,
 ): Promise<MemoryEntry | null> {
+  console.log("[memory] extraction de la mémoire en cours");
   const completion = await groq.chat.completions.create({
     model: GROQ_MODEL,
     messages: [
@@ -131,6 +132,7 @@ export async function extractAndSaveMemory(
   }
 
   if (!data.trigger && !data.information && !data.additional_info) {
+    console.log("[memory] aucune information mémorisable détectée");
     return null;
   }
 
@@ -142,6 +144,7 @@ export async function extractAndSaveMemory(
   };
 
   await appendMemory(entry);
+  console.log("[memory] entrée sauvegardée:", entry.information);
   return entry;
 }
 
@@ -149,6 +152,7 @@ export async function extractAndSaveMemory(
 export async function getMemoryAsText() {
   const memory = await loadMemory();
   if (memory.length === 0) return null;
+  console.log(`[memory] ${memory.length} entrée(s) de mémoire chargée(s)`);
 
   return memory
     .map((m, i) => {

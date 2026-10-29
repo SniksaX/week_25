@@ -25,6 +25,7 @@ function emitTicket(ticket: Ticket) {
   for (const client of sseClients) {
     client.write(data);
   }
+  console.log(`[ticket] ticket ${ticket.id} diffusé à ${sseClients.size} client(s) SSE`);
 }
 
 async function loadTickets(): Promise<Ticket[]> {
@@ -45,6 +46,7 @@ export async function createTicket(
   proposed: string,
   reason: string
 ): Promise<Ticket> {
+  console.log("[ticket] création d'un nouveau ticket");
   const tickets = await loadTickets();
   const randomNum = Math.floor(Math.random() * 900) + 100;
   const domains = ["gmail.com", "hotmail.fr", "yahoo.fr", "outlook.com"];
@@ -62,6 +64,7 @@ export async function createTicket(
   tickets.push(ticket);
   await mkdir(dirname(FILE), { recursive: true });
   await writeFile(FILE, JSON.stringify(tickets, null, 2), "utf8");
+  console.log(`[ticket] ticket ${ticket.id} sauvegardé dans tickets.json`);
   
   emitTicket(ticket);
   return ticket;

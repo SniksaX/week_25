@@ -66,10 +66,10 @@ btnEscalate.addEventListener("click", async () => {
 
     if (!response.ok) throw new Error("Erreur lors de la création du ticket.");
 
-    escalateContainer.innerHTML = "<p style='color: green; font-weight: bold;'>✅ Un technicien a été notifié et prendra contact avec vous.</p>";
+    escalateContainer.innerHTML = "<p style='color: green; font-weight: bold;'>Un technicien a été notifié et prendra contact avec vous.</p>";
   } catch (error) {
     alert(error.message);
     btnEscalate.disabled = false;
-    btnEscalate.textContent = "🚨 Transférer à un technicien humain";
+    btnEscalate.textContent = "Transférer à un technicien humain";
   }
 });

@@ -14,5 +14,13 @@
     "proposed": "Bonjour Siraj,\n\nJe ne suis pas sûr de bien comprendre votre question concernant « vipian ». Pourriez‑vous préciser ce que vous souhaitez savoir ? Je suis là pour vous aider.",
     "reason": "vipian pas marchi",
     "createdAt": "2026-10-29T15:48:47.968Z"
+  },
+  {
+    "id": "1fd364a9-379f-4e9a-ad30-546a3218ab9e",
+    "userEmail": "user659@hotmail.fr",
+    "context": "mon vpn ne marche pas",
+    "proposed": "Bonjour Siraj,\n\nJe suis désolé d’apprendre que votre VPN ne fonctionne pas. Pour pouvoir vous aider efficacement, pourriez‑vous me préciser :\n\n1. Le type de VPN que vous utilisez (ex. OpenVPN, Cisco AnyConnect, VPN intégré Windows, etc.) ?\n2. Le système d’exploitation de votre poste (Windows 10/11, macOS, Linux, etc.) ?\n3. Le message d’erreur exact qui apparaît, ou le comportement observé (connexion refusée, timeout, etc.) ?\n4. Si vous avez récemment modifié votre mot de passe ou votre configuration VPN.\n\nEn attendant ces informations, voici quelques vérifications rapides :\n\n| Étape | Action | Pourquoi |\n|-------|--------|----------|\n| 1 | Vérifiez votre connexion Internet | Le VPN nécessite une connexion active. |\n| 2 | Redémarrez le client VPN | Cela résout souvent les plantages temporaires. |\n| 3 | Assurez‑vous que votre compte est actif | Un compte expiré ou suspendu bloque l’accès. |\n| 4 | Vérifiez les paramètres de votre pare‑feu/antivirus | Ils peuvent bloquer les ports VPN (généralement 1194 UDP pour OpenVPN, 443 TCP pour les tunnels HTTPS). |\n| 5 | Essayez un autre réseau (ex. Wi‑Fi d’un collègue) | Cela permet de déterminer si le problème vient de votre réseau local. |\n\nUne fois que vous m’aurez fourni les détails ci‑dessus, je pourrai vous guider vers une solution plus ciblée.\n\nBonne journée !",
+    "reason": "test",
+    "createdAt": "2026-10-29T15:56:52.544Z"
   }
 ]

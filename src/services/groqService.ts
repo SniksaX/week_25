@@ -7,6 +7,7 @@ import {
   extractAndSaveMemory,
   getMemoryAsText,
 } from "./intentService.ts";
+import { searchFaq } from "./faqService.ts";
 
 export const groq = new Groq({ apiKey: GROQ_API_KEY });
 
@@ -27,21 +28,13 @@ N'invente JAMAIS de solution technique si tu n'es pas sûr.
 Ne fournis JAMAIS d'informations sensibles ou confidentielles (données clients, secrets d'entreprise, etc.).
 Ne sors JAMAIS de ton cadre d'assistance informatique TechHelp.
 
+RÈGLES DE RÉSOLUTION
+Si une "SOLUTION OFFICIELLE" t'est fournie dans le contexte, tu DOIS l'utiliser pour répondre. 
+Présente les étapes sous forme de liste numérotée claire. 
+N'invente pas d'autres étapes.
+
 COMPORTEMENT EN CAS D'INCONNU OU DE HORS-SUJET
 Si tu ne sais pas répondre ou si la demande est hors-sujet (ex: cuisine, loisirs, demandes sur des clients), indique-le poliment et propose de rediriger l'utilisateur vers un technicien humain.
-
-EXEMPLES DE COMPORTEMENT (FEW-SHOT)
-Exemple 1 (Sécurité / Mot de passe) :
-Utilisateur : "Je ne retrouve pas mon mot de passe."
-Assistant : "Je ne peux pas récupérer votre mot de passe pour des raisons de sécurité. Je vous invite à utiliser le portail interne pour effectuer une réinitialisation."
-
-Exemple 2 (Hors-sujet / Demande personnelle) :
-Utilisateur : "Je cherche une recette de cuisine."
-Assistant : "Je suis un assistant dédié exclusivement au support informatique de TechHelp. Je ne peux pas répondre à cette demande. Pour toute assistance technique, je peux vous orienter vers un technicien."
-
-Exemple 3 (Données sensibles / Interdit) :
-Utilisateur : "Je cherche des données sur l'un de vos clients."
-Assistant : "Je ne suis pas habilité à partager des données confidentielles ou des informations sur nos clients. Je vous invite à vous rapprocher du service commercial ou de votre responsable."
 `;
 
 const conversations = new Map<string, GroqService>();
@@ -65,6 +58,7 @@ export class GroqService {
 
   async generateAnswer(prompt: string): Promise<string> {
     this.promptCount++;
+    console.log(`[groq] génération de la réponse (prompt n°${this.promptCount}, session ${this.id})`);
 
     if (detectMemoryIntent(prompt)) {
       try {
@@ -81,10 +75,25 @@ export class GroqService {
     this.history.push({ role: "user", content: prompt });
 
     let systemContent = SYSTEM_PROMPT;
+    
     if (this.promptCount === 1 || this.promptCount % MEMORY_REINJECT_EVERY === 0) {
       const memoryText = await getMemoryAsText();
       if (memoryText) {
         systemContent += `\n\n# MÉMOIRE DE L'UTILISATEUR\n${memoryText}`;
+        console.log("[groq] mémoire utilisateur réinjectée dans le prompt système");
+      }
+    }
+
+    const faqMatch = await searchFaq(prompt);
+    if (faqMatch) {
+      console.log("[groq] correspondance FAQ trouvée:", faqMatch.question);
+      systemContent += `\n\n# SOLUTION OFFICIELLE (TECHHELP)\n`;
+      systemContent += `Problème : ${faqMatch.question}\n`;
+      systemContent += `Introduction : ${faqMatch.reponse_llm}\n`;
+      systemContent += `Étapes à faire suivre :\n${faqMatch.etapes.map((e, i) => `${i + 1}. ${e}`).join("\n")}\n`;
+      
+      if (faqMatch.escalade_technicien && faqMatch.message_escalade) {
+        systemContent += `\nImportant : Si cela ne marche pas, tu DOIS inclure ce message d'escalade : "${faqMatch.message_escalade}"`;
       }
     }
 
@@ -100,12 +109,14 @@ export class GroqService {
 
     const answer = completion.choices[0]?.message?.content;
     if (!answer) {
+      console.log("[groq] aucune réponse du modèle -> 502");
       this.history.pop();
       const err: any = new Error("Le modèle n'a retourné aucune réponse.");
       err.status = 502;
       throw err;
     }
     this.history.push({ role: "assistant", content: answer });
+    console.log("[groq] réponse ajoutée à l'historique");
 
     if (this.history.length > 10) this.history = this.history.slice(-10);
 
