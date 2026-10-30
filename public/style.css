@@ -370,13 +370,62 @@
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
 
-.message-bubble { white-space: pre-wrap; }
+/* --- Markdown Formatting inside Bubbles --- */
+
+.message-bubble {
+  white-space: normal !important;
+}
+
+.message-bubble > *:first-child { margin-top: 0; }
+.message-bubble > *:last-child { margin-bottom: 0; }
+.message-bubble p { margin: 0 0 0.8rem 0; }
+.message-bubble p:last-child { margin-bottom: 0; }
+
+.message-bubble ul, 
+.message-bubble ol {
+  margin: 0.5rem 0 0.8rem 1.2rem;
+  padding: 0;
+}
+.message-bubble li {
+  margin-bottom: 0.3rem;
+}
+
+.message-bubble code {
+  background: var(--slate-100);
+  padding: 0.15rem 0.3rem;
+  border-radius: 0.3rem;
+  font-family: monospace;
+  font-size: 0.85em;
+}
+.message-bubble pre {
+  background: var(--slate-100);
+  padding: 0.8rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  margin: 0.8rem 0;
+}
+.message-bubble pre code {
+  background: transparent;
+  padding: 0;
+}
+
+.message-bubble strong {
+  font-weight: 700;
+  color: var(--navy-950);
+}
+
+.message-row--user .message-bubble strong {
+  color: var(--on-accent);
+}
+
+/* Fixes for older style rules */
 .sidebar:not(.is-open) + .sidebar-overlay { display: none; }
 .composer button { width: auto; }
 [hidden] { display: none !important; }
 
 .nav-badge { margin-left: auto; min-width: 1.3rem; padding: 0.12rem 0.4rem; border-radius: 1rem; color: var(--on-accent); background: var(--blue-600); font-size: 0.6rem; font-weight: 700; text-align: center; }
 
+/* Modals & Tickets */
 .modal { width: min(92vw, 26rem); padding: 0; border: 1px solid var(--slate-200); border-radius: 1rem; color: var(--navy-950); background: var(--white); box-shadow: 0 1.5rem 3rem var(--shadow-color); }
 .modal--wide { width: min(92vw, 40rem); }
 .modal::backdrop { background: rgba(11, 20, 39, 0.5); backdrop-filter: blur(0.15rem); }

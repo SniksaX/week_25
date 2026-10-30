@@ -66,7 +66,13 @@ function addMessage(role, text) {
 
   const bubble = document.createElement("div");
   bubble.className = "message-bubble";
-  bubble.textContent = text;
+  
+  // Markdown parsing for assistant, plain text for user
+  if (role === "assistant") {
+    bubble.innerHTML = marked.parse(text);
+  } else {
+    bubble.textContent = text;
+  }
 
   const time = document.createElement("p");
   time.className = "message-time";
@@ -362,6 +368,11 @@ async function openTickets() {
           <p class="ticket-date">${new Date(newTicket.createdAt).toLocaleString("fr-FR")}</p>
         `;
         ticketList.prepend(item);
+      };
+      
+      eventSource.onerror = () => {
+        eventSource.close();
+        eventSource = null;
       };
     }
   } catch (error) {
