@@ -270,6 +270,9 @@ loginForm.addEventListener("submit", async (event) => {
     loginForm.reset();
     loginDialog.close();
     setAdminMode(true);
+
+    window.location.reload(); 
+
   } catch (error) {
     loginError.textContent = error.message;
   }
@@ -278,6 +281,7 @@ loginForm.addEventListener("submit", async (event) => {
 adminLogoutButton.addEventListener("click", () => {
   localStorage.removeItem("adminToken");
   setAdminMode(false);
+  window.location.reload(); 
 });
 
 async function loadTickets() {
