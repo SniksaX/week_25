@@ -22,5 +22,13 @@
     "proposed": "Bonjour Siraj,\n\nJe suis désolé d’apprendre que votre VPN ne fonctionne pas. Pour pouvoir vous aider efficacement, pourriez‑vous me préciser :\n\n1. Le type de VPN que vous utilisez (ex. OpenVPN, Cisco AnyConnect, VPN intégré Windows, etc.) ?\n2. Le système d’exploitation de votre poste (Windows 10/11, macOS, Linux, etc.) ?\n3. Le message d’erreur exact qui apparaît, ou le comportement observé (connexion refusée, timeout, etc.) ?\n4. Si vous avez récemment modifié votre mot de passe ou votre configuration VPN.\n\nEn attendant ces informations, voici quelques vérifications rapides :\n\n| Étape | Action | Pourquoi |\n|-------|--------|----------|\n| 1 | Vérifiez votre connexion Internet | Le VPN nécessite une connexion active. |\n| 2 | Redémarrez le client VPN | Cela résout souvent les plantages temporaires. |\n| 3 | Assurez‑vous que votre compte est actif | Un compte expiré ou suspendu bloque l’accès. |\n| 4 | Vérifiez les paramètres de votre pare‑feu/antivirus | Ils peuvent bloquer les ports VPN (généralement 1194 UDP pour OpenVPN, 443 TCP pour les tunnels HTTPS). |\n| 5 | Essayez un autre réseau (ex. Wi‑Fi d’un collègue) | Cela permet de déterminer si le problème vient de votre réseau local. |\n\nUne fois que vous m’aurez fourni les détails ci‑dessus, je pourrai vous guider vers une solution plus ciblée.\n\nBonne journée !",
     "reason": "test",
     "createdAt": "2026-10-29T15:56:52.544Z"
+  },
+  {
+    "id": "04183fac-5d98-46e6-b702-238caec03bb9",
+    "userEmail": "user825@hotmail.fr",
+    "context": "fais moi un tableau comment fix mon wifi",
+    "proposed": "**Tableau de dépannage Wi‑Fi (TechHelp)**  \n\n| Étape | Action à réaliser | Résultat attendu |\n|-------|-------------------|------------------|\n| 1 | Vérifiez que le Wi‑Fi est activé sur votre ordinateur. | Le bouton Wi‑Fi doit être en position « ON » (ou l’icône réseau doit indiquer une connexion). |\n| 2 | Déconnectez‑vous du réseau et reconnectez‑vous. | Vous devriez être invité à saisir le mot‑de‑passe, puis la connexion se rétablit. |\n| 3 | Si le problème persiste, redémarrez votre ordinateur. | Le redémarrage réinitialise le pilote réseau et peut résoudre les erreurs temporaires. |\n| 4 | Vérifiez si vos collègues à proximité rencontrent le même problème. | Si d’autres utilisateurs sont affectés, le problème vient probablement du réseau global. |\n\n> **Si aucune de ces étapes ne résout votre problème,** merci de contacter le support technique de TechHelp pour une assistance plus approfondie.  \n\n*Bonne chance, Siraj !*",
+    "reason": "aze",
+    "createdAt": "2026-10-30T09:04:39.814Z"
   }
 ]

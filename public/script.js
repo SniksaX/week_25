@@ -139,9 +139,14 @@ async function sendMessage(text) {
   const typing = showTyping();
 
   try {
+    const headers = { "Content-Type": "application/json" };
+    const adminToken = localStorage.getItem("adminToken");
+    if (adminToken) {
+      headers["Authorization"] = "Bearer " + adminToken;
+    }
     const response = await fetch("/api/ai/chat", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: headers,
       body: JSON.stringify({ prompt, sessionId: currentSessionId }),
     });
 

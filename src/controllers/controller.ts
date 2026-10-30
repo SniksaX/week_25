@@ -14,6 +14,9 @@ export async function chatCompletion(req: Request, res: Response) {
     return res.status(400).json({ error: "Le champ prompt est obligatoire." });
   }
 
+  const isAdmin = req.headers.authorization === "Bearer admin-super-secret-token";
+  console.log("[chat] isAdmin:", isAdmin);
+
   let session =
     typeof sessionId === "string" ? GroqService.getSession(sessionId) : null;
   if (typeof sessionId === "string" && !session) {
@@ -28,7 +31,7 @@ export async function chatCompletion(req: Request, res: Response) {
   }
 
   try {
-    const answer = await session.generateAnswer(prompt);
+    const answer = await session.generateAnswer(prompt, isAdmin);
     console.log("[chat] réponse générée pour la session", session.id);
     return res.json({ sessionId: session.id, answer });
   } catch (error) {

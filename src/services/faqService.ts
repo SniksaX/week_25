@@ -17,6 +17,11 @@ let faqCache: FaqEntry[] | null = null;
 const norm = (s: string) =>
   s.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
 
+export function clearFaqCache() {
+  faqCache = null;
+  console.log("[faq] cache FAQ vidé");
+}
+
 export async function searchFaq(prompt: string): Promise<FaqEntry | null> {
   if (!faqCache) {
     try {

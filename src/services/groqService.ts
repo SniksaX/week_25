@@ -2,11 +2,7 @@ import Groq from "groq-sdk";
 import type { ChatCompletionMessageParam } from "groq-sdk/resources/chat/completions.js";
 import { v4 as uuidv4 } from "uuid";
 import { GROQ_API_KEY, GROQ_MODEL } from "../config.ts";
-import {
-  detectMemoryIntent,
-  extractAndSaveMemory,
-  getMemoryAsText,
-} from "./intentService.ts";
+import { detectAdminFaqIntent, extractAndSaveFaq } from "./adminIntentService.ts";
 import { searchFaq } from "./faqService.ts";
 
 export const groq = new Groq({ apiKey: GROQ_API_KEY });
@@ -38,7 +34,6 @@ Si tu ne sais pas répondre ou si la demande est hors-sujet (ex: cuisine, loisir
 `;
 
 const conversations = new Map<string, GroqService>();
-const MEMORY_REINJECT_EVERY = 10;
 
 export class GroqService {
   id: string;
@@ -56,17 +51,23 @@ export class GroqService {
     conversations.set(this.id, this);
   }
 
-  async generateAnswer(prompt: string): Promise<string> {
+  async generateAnswer(prompt: string, isAdmin: boolean = false): Promise<string> {
     this.promptCount++;
-    console.log(`[groq] génération de la réponse (prompt n°${this.promptCount}, session ${this.id})`);
+    console.log(`[groq] génération de la réponse (prompt n°${this.promptCount}, session ${this.id}, admin=${isAdmin})`);
 
-    if (detectMemoryIntent(prompt)) {
+    if (isAdmin && detectAdminFaqIntent(prompt)) {
       try {
-        const saved = await extractAndSaveMemory(prompt);
-        if (saved) console.log("[memory] saved:", saved.information);
+        const saved = await extractAndSaveFaq(prompt, this.history);
+        if (saved) {
+          console.log("[admin] FAQ saved successfully:", saved.id);
+          this.history.push({ role: "user", content: prompt });
+          const confirmation = `La FAQ a bien été enregistrée dans la base de connaissances.\n\n- Catégorie : ${saved.categorie}\n- Question : ${saved.question}\n- Mots-clés : ${saved.mots_cles.join(", ")}\n- Étapes : ${saved.etapes.length}`;
+          this.history.push({ role: "assistant", content: confirmation });
+          return confirmation;
+        }
       } catch (e) {
         console.error(
-          "[memory] extraction failed:",
+          "[admin] FAQ extraction failed:",
           e instanceof Error ? e.message : e,
         );
       }
@@ -75,14 +76,6 @@ export class GroqService {
     this.history.push({ role: "user", content: prompt });
 
     let systemContent = SYSTEM_PROMPT;
-    
-    if (this.promptCount === 1 || this.promptCount % MEMORY_REINJECT_EVERY === 0) {
-      const memoryText = await getMemoryAsText();
-      if (memoryText) {
-        systemContent += `\n\n# MÉMOIRE DE L'UTILISATEUR\n${memoryText}`;
-        console.log("[groq] mémoire utilisateur réinjectée dans le prompt système");
-      }
-    }
 
     const faqMatch = await searchFaq(prompt);
     if (faqMatch) {

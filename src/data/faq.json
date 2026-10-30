@@ -2,7 +2,15 @@
   {
     "id": "pwd_01",
     "categorie": "Mot de passe",
-    "mots_cles": ["mot de passe", "oublié", "connexion", "session", "accès", "bloqué", "identifiant"],
+    "mots_cles": [
+      "mot de passe",
+      "oublié",
+      "connexion",
+      "session",
+      "accès",
+      "bloqué",
+      "identifiant"
+    ],
     "question": "J'ai oublié mon mot de passe ou mon compte est bloqué",
     "reponse_llm": "Je ne peux pas vous demander votre mot de passe pour des raisons de sécurité, et je ne peux pas le réinitialiser à distance. Voici la procédure standard :",
     "etapes": [
@@ -17,7 +25,16 @@
   {
     "id": "print_01",
     "categorie": "Imprimante",
-    "mots_cles": ["imprimante", "imprimer", "bourrage", "papier", "encre", "hors ligne", "scanner", "impression"],
+    "mots_cles": [
+      "imprimante",
+      "imprimer",
+      "bourrage",
+      "papier",
+      "encre",
+      "hors ligne",
+      "scanner",
+      "impression"
+    ],
     "question": "Mon imprimante ne fonctionne pas ou est hors ligne",
     "reponse_llm": "Pas de panique, c'est un problème courant. Vérifions ensemble étape par étape :",
     "etapes": [
@@ -32,7 +49,16 @@
   {
     "id": "wifi_01",
     "categorie": "Wi-Fi",
-    "mots_cles": ["wifi", "wi-fi", "internet", "réseau", "connexion", "box", "déconnexion", "lent"],
+    "mots_cles": [
+      "wifi",
+      "wi-fi",
+      "internet",
+      "réseau",
+      "connexion",
+      "box",
+      "déconnexion",
+      "lent"
+    ],
     "question": "Je n'ai plus accès au Wi-Fi",
     "reponse_llm": "Je vais vous aider à rétablir votre connexion. Dans 90% des cas, ces étapes suffisent :",
     "etapes": [
@@ -47,7 +73,14 @@
   {
     "id": "vpn_01",
     "categorie": "VPN",
-    "mots_cles": ["vpn", "accès distant", "télétravail", "connexion sécurisée", "serveur", "distance"],
+    "mots_cles": [
+      "vpn",
+      "accès distant",
+      "télétravail",
+      "connexion sécurisée",
+      "serveur",
+      "distance"
+    ],
     "question": "Je n'arrive pas à me connecter au VPN",
     "reponse_llm": "Voici les vérifications de base pour le VPN :",
     "etapes": [
@@ -62,7 +95,15 @@
   {
     "id": "soft_01",
     "categorie": "Logiciels",
-    "mots_cles": ["installation", "logiciel", "application", "téléchargement", "erreur", "mise à jour", "catalogue"],
+    "mots_cles": [
+      "installation",
+      "logiciel",
+      "application",
+      "téléchargement",
+      "erreur",
+      "mise à jour",
+      "catalogue"
+    ],
     "question": "Je dois installer un nouveau logiciel",
     "reponse_llm": "Pour des raisons de sécurité, je ne peux pas installer de logiciels à distance. Voici la marche à suivre :",
     "etapes": [
@@ -76,7 +117,16 @@
   {
     "id": "mail_01",
     "categorie": "Messagerie",
-    "mots_cles": ["mail", "outlook", "email", "e-mail", "boîte pleine", "réception", "teams", "message"],
+    "mots_cles": [
+      "mail",
+      "outlook",
+      "email",
+      "e-mail",
+      "boîte pleine",
+      "réception",
+      "teams",
+      "message"
+    ],
     "question": "Je ne reçois plus mes e-mails ou ma boîte est pleine",
     "reponse_llm": "Vérifions ensemble votre messagerie. C'est souvent lié à un problème de stockage :",
     "etapes": [
@@ -91,7 +141,18 @@
   {
     "id": "hw_01",
     "categorie": "Matériel",
-    "mots_cles": ["écran", "clavier", "souris", "matériel", "noir", "clignote", "allumé", "câble", "batterie", "charge"],
+    "mots_cles": [
+      "écran",
+      "clavier",
+      "souris",
+      "matériel",
+      "noir",
+      "clignote",
+      "allumé",
+      "câble",
+      "batterie",
+      "charge"
+    ],
     "question": "Mon matériel (écran, clavier) ne répond plus",
     "reponse_llm": "Faisons quelques vérifications physiques de base :",
     "etapes": [
@@ -106,7 +167,16 @@
   {
     "id": "perf_01",
     "categorie": "Performances",
-    "mots_cles": ["lent", "lenteur", "plante", "ralenti", "redémarrage", "bloque", "freeze", "chauffe"],
+    "mots_cles": [
+      "lent",
+      "lenteur",
+      "plante",
+      "ralenti",
+      "redémarrage",
+      "bloque",
+      "freeze",
+      "chauffe"
+    ],
     "question": "Mon ordinateur est très lent ou plante régulièrement",
     "reponse_llm": "Un ordinateur lent peut avoir plusieurs causes. Voici les actions à essayer :",
     "etapes": [
@@ -121,7 +191,16 @@
   {
     "id": "sec_01",
     "categorie": "Sécurité",
-    "mots_cles": ["phishing", "hameçonnage", "virus", "mail suspect", "lien bizarre", "piratage", "spam", "usurpation"],
+    "mots_cles": [
+      "phishing",
+      "hameçonnage",
+      "virus",
+      "mail suspect",
+      "lien bizarre",
+      "piratage",
+      "spam",
+      "usurpation"
+    ],
     "question": "J'ai reçu un e-mail suspect ou j'ai cliqué sur un lien bizarre",
     "reponse_llm": "La sécurité est notre priorité. Voici les consignes à suivre immédiatement :",
     "etapes": [
@@ -136,7 +215,16 @@
   {
     "id": "net_01",
     "categorie": "Réseau",
-    "mots_cles": ["lecteur réseau", "partage", "dossier", "accès refusé", "disque", "fichier", "introuvable", "chemin"],
+    "mots_cles": [
+      "lecteur réseau",
+      "partage",
+      "dossier",
+      "accès refusé",
+      "disque",
+      "fichier",
+      "introuvable",
+      "chemin"
+    ],
     "question": "Je n'ai plus accès à mes dossiers partagés",
     "reponse_llm": "Vérifions l'accès à vos fichiers d'entreprise :",
     "etapes": [
@@ -147,5 +235,26 @@
     ],
     "escalade_technicien": true,
     "message_escalade": "Si l'accès vous est toujours refusé, il se peut que vos droits aient changé. Je vous redirige vers un technicien pour vérifier vos autorisations."
+  },
+  {
+    "id": "screen_black",
+    "categorie": "Écran",
+    "mots_cles": [
+      "écran noir",
+      "câble vidéo",
+      "port graphique",
+      "diagnostic matériel"
+    ],
+    "question": "Mon écran est noir mais le PC est allumé, que faire ?",
+    "reponse_llm": "Voici les vérifications à faire pour un écran noir alors que l’unité centrale reste allumée :",
+    "etapes": [
+      "Vérifiez les câbles de connexion : débranchez puis rebranchez le câble vidéo (HDMI, DisplayPort, DVI, VGA) de l’écran et de l’ordinateur.",
+      "Testez un autre port ou un autre câble : si votre carte graphique possède plusieurs sorties, essayez un autre port (ex. HDMI → DisplayPort) ou un câble différent.",
+      "Vérifiez la source d’alimentation de l’écran : assurez‑vous que l’écran est bien branché et que le voyant d’alimentation est allumé, et appuyez sur le bouton d’alimentation si nécessaire.",
+      "Redémarrez l’ordinateur : un simple redémarrage peut réinitialiser la sortie vidéo.",
+      "Essayez un autre écran ou un moniteur externe : connectez un autre écran ou un téléviseur à votre PC pour vérifier si le problème vient de l’écran ou de la carte graphique."
+    ],
+    "escalade_technicien": true,
+    "message_escalade": "Si le matériel est physiquement défectueux ou ne s’allume plus du tout, je vous redirige vers un technicien pour un diagnostic ou un remplacement."
   }
 ]
